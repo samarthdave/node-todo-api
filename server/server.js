@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const _ = require('lodash');
 
 const { mongoose } = require('./db/mongoose');
 const { PORT } = require('./config');
@@ -64,6 +65,29 @@ app.delete('/todos/:id', (req, res) => {
     }).catch((e) => res.status(400).json({
         message: 'Could not delete your todo.'
     }));
+});
+
+// PUT /todos/:id
+app.patch('/todos/:id', (req, res) => {
+    var id = req.params.id;
+    var body = _.pick(req.body, ['text', 'completed']);
+
+    if(_.isBoolean(body.completed) && body.completed) {
+        body.completedAt = new Date().getTime();
+    } else {
+        body.completed = false;
+        body.completedAt = null;
+    }
+
+    Todo.findByIdAndUpdate(id, { $set: body }, { new: true })
+    .then((todo) => {
+        if(!todo) {
+            return res.status(404).json();
+        }
+        res.json({ todo });
+    }).catch((e) => {
+        res.status(400).json();
+    })
 });
 
 app.listen(PORT, () => {
