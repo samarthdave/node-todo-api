@@ -26,3 +26,5 @@ app.post('/todos', (req, res) => {
 app.listen(PORT, () => {
     console.log(`The magic happens on port ${PORT}!`);
 });
+
+module.exports = { app };
