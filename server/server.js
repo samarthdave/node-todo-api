@@ -17,18 +17,17 @@ app.post('/todos', (req, res) => {
     });
 
     todo.save()
-    .then((doc) => {
-        res.json(doc);
-    }, (e) => {
-        res.status(400).send(e);
-    });
+    .then((doc) => res.json(doc))
+    .catch((e) => res.status(400).json({
+        message: 'Could not save that todo.'
+    }));
 });
 
 // GET /todos
 app.get('/todos', (req, res) => {
     Todo.find()
     .then((todos) => res.json({ todos }))
-    .catch((e) => res.status(400).send({
+    .catch((e) => res.status(400).json({
         message: 'Could not get all todos.'
     }));
 });
