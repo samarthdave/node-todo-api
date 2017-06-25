@@ -9,6 +9,7 @@ var { User } = require('./models/User');
 var app = express();
 app.use(bodyParser.json());
 
+// POST /todos
 app.post('/todos', (req, res) => {
 
     var todo = new Todo({
@@ -21,6 +22,13 @@ app.post('/todos', (req, res) => {
     }, (e) => {
         res.status(400).send(e);
     });
+});
+
+// GET /todos
+app.get('/todos', (req, res) => {
+    Todo.find()
+    .then((todos) => res.json({ todos }))
+    .catch((e) => res.status(400).send(e));
 });
 
 app.listen(PORT, () => {
