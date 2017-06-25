@@ -31,6 +31,22 @@ app.get('/todos', (req, res) => {
     .catch((e) => res.status(400).send(e));
 });
 
+// GET /todos/:id
+app.get('/todos/:id', (req, res) => {
+    var id = req.params.id;
+
+    Todo.findById(id)
+    .then((todo) => {
+        if(!todo) {
+            return res.status(404).send('Could not find your todo');
+        }
+        res.json(todo);
+    })
+    .catch((e) => res.status(400).json({
+        message: 'There was an error finding your todo.'
+    }));
+});
+
 app.listen(PORT, () => {
     console.log(`The magic happens on port ${PORT}!`);
 });
