@@ -1,9 +1,9 @@
+require('./config');
 const express = require('express');
 const bodyParser = require('body-parser');
 const _ = require('lodash');
 
 const { mongoose } = require('./db/mongoose');
-const { PORT } = require('./config');
 var { Todo } = require('./models/Todo');
 var { User } = require('./models/User');
 
@@ -12,7 +12,6 @@ app.use(bodyParser.json());
 
 // POST /todos
 app.post('/todos', (req, res) => {
-
     var todo = new Todo({
         text: req.body.text
     });
@@ -90,6 +89,7 @@ app.patch('/todos/:id', (req, res) => {
     })
 });
 
+var PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`The magic happens on port ${PORT}!`);
 });
